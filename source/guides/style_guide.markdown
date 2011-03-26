@@ -52,7 +52,7 @@ the following guidelines.
     In general, inheritance leads to code that is harder to read. 
     Most use cases for inheritance can be replaced by exposing class
     parameters that can be used to configure resource attributes.
-    (See appendix A)
+    (See Appendix A)
 3.  Modules must not require an ENC.  Modules must operate with
     ENC’s.  
     When surveyed, there was near consensus that an ENC should not be
