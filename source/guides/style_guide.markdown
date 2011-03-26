@@ -51,8 +51,8 @@ the following guidelines.
 2.  Inheritance should be avoided.
     In general, inheritance leads to code that is harder to read. 
     Most use cases for inheritance can be replaced by exposing class
-    parameters that can be used to configure resource attributes.
-    See a possible approach in Appendix A.
+    parameters that can be used to configure resource attributes. See 
+    the Class Inheritance section for more details.
 3.  Modules must not require an ENC.  Modules must operate with
     ENC’s.  
     When surveyed, there was near consensus that an ENC should not be
@@ -420,20 +420,22 @@ manifests directory of the given module, for example:
 
 ### Internal Organization of a class
 
-There is an implicit statement of "should be at this relative
-location" for each of these items.  The word may should be
+Classes should be organised with a consistent structure and style.
+In the below list there is an implicit statement of "should be at this relative
+location" for each of these items.  The word "may" should be
 interpreted as "If there are any X’s they should be here".
 
-1.  Should validate class parameters
-2.  Should fail catalog compilation if parameters are invalid
-3.  May declare local variables
-4.  May declare relationships to other classes Class[‘foo’] -\> Class[‘bar’]
-5.  May override resources
-6.  May declare resource defaults
-7.  May declare defined resource types
-8.  May declare native types (Users, Groups, Services...)
-9.  May declare other resources
-10. May declare Resource relationships inside of conditionals
+1.  Should define the class and parameters
+2.  Should validate any class parameters and fail catalog compilation if any parameters are invalid 
+3.  Should default any validated parameters to the most general case
+4.  May declare local variables
+5.  May declare relationships to other classes Class['foo'] -\> Class['bar']
+6.  May override resources
+7.  May declare resource defaults
+8.  May declare defined resource types
+9.  May declare native types (Users, Groups, Services...)
+10.  May declare other resources
+11.  May declare Resource relationships inside of conditionals
 
 The following example follows the recommended style:
 
@@ -517,22 +519,86 @@ The following example shall not be followed:
 ### Class Inheritance
 
 Inheritance may only be used within a module and must not be used
-across module name spaces.
+across module name spaces. This is a result of:
 
-1.  needed for portability - inheriting outside of the module
+1.  Portability - inheriting outside of the module
     breaks the idea of modules and limits our ability for portability
-2.  inheritance outside of the module is also indicative of code
-    that should be refactored - you probably need to be using includes
-    / parameterized classes
+2.  inheritance outside of the module is indicative of code
+    that should be refactored. In this instance you probably should be 
+    using includes or parameterized classes
 
 Inheritance should be avoided when alternatives are viable.  For
 example, if inheritance is being used to override relationships
 when stopping a service by overriding the relationship of a class
 managing a running service, the code should be refactored to use a
 single class with an ensure parameter and relationship declarations
-inside of conditionals.
+inside of conditionals. An example of this follows. The example makes 
+several assumptions and is based on an example provided in the Puppet 
+Master training for managing bluetooth.
 
-The following example may be used if absolutely necessary:
+1.  Class inheritance is only useful for overriding resource
+    parameters.
+2.  The most commonly overridden parameters are relationship
+    meta-parameters.
+3.  Other parameters, e.g. ensure and enable may have behavior
+    changed through the use of variables and conditional logic.
+
+{% highlight ruby %}
+    class bluetooth($ensure=present, $autoupgrade=false) {
+       # Validate class parameter inputs. (Fail early and fail hard)
+
+       if ! ($ensure in [ "present", "absent" ]) {
+         fail("bluetooth ensure parameter must be absent or present")
+       }
+
+       if ! ($autoupgrade in [ true, false ]) {
+         fail("bluetooth autoupgrade parameter must be true or false")
+       }
+
+       # Set local variables based on the desired state
+
+       if $ensure == "present" {
+         $service_enable = true
+         $service_ensure = running
+         if $autoupgrade == true {
+           $package_ensure = latest
+         } else {
+           $package_ensure = present
+         }
+       } else {
+         $service_enable = false
+         $service_ensure = stopped
+         $package_ensure = absent
+       }
+
+       # Declare resources without any relationships in this section
+
+       package { [ "bluez-libs", "bluez-utils"]:
+         ensure => $package_ensure,
+       }
+
+       service { hidd:
+         enable         => $service_enable,
+         ensure         => $service_ensure,
+         status         => "source /etc/init.d/functions; status hidd",
+         hasstatus      => true,
+         hasrestart     => true,
+      }
+
+      # Finally, declare relations based on desired behavior
+
+      if $ensure == "present" {
+        Package["bluez-libs"]  -> Package["bluez-utils"]
+        Package["bluez-libs"]  ~> Service[hidd]
+        Package["bluez-utils"] ~> Service[hidd]
+      } else {
+        Service["hidd"]        -> Package["bluez-utils"]
+        Package["bluez-utils"] -> Package["bluez-libs"]
+      }
+    }
+{% endhighlight %}
+
+In the event you cannot avoid inheritance then rhe following example may be used:
 
 {% highlight ruby %}
     class ssh {
@@ -693,83 +759,3 @@ For defined resources:
 ## The extlookup() function
 
 Modules should avoid the use of extlookup() in favor of ENCs or other alternatives.
-
-## Appendix A - Class Inheritance
-
-This Appendix process documents an approach to avoiding class inheritance.
-This approach is shown below using the bluetooth example from the Puppet Master 
-training.
-
-There are a couple of assumptions we make:
-
-1.  Class inheritance is only useful for overriding resource
-    parameters.
-2.  The most commonly overridden parameters are relationship
-    meta-parameters.
-3.  Other parameters, e.g. ensure and enable may have behavior
-    changed through the use of variables and conditional logic.
-
-In the bluetooth exercise, the order of operations is flipped.
-
-1.  class bluetooth - manages the libraries, then the utilities,
-    then the service.
-2.  class bluetooth::disable manages the service, then the
-    utilities, then the libraries.
-
-In an effort to reduce the complexity the solution can be reduced
-to a single class:
-
-{% highlight ruby %}
-    class bluetooth($ensure=present, $autoupgrade=false) {
-       # Validate class parameter inputs. (Fail early and fail hard)
-
-       if ! ($ensure in [ "present", "absent" ]) {
-         fail("bluetooth ensure parameter must be absent or present")
-       }
-
-       if ! ($autoupgrade in [ true, false ]) {
-         fail("bluetooth autoupgrade parameter must be true or false")
-       }
-
-       # Set local variables based on the desired state
-
-       if $ensure == "present" {
-         $service_enable = true
-         $service_ensure = running
-         if $autoupgrade == true {
-           $package_ensure = latest
-         } else {
-           $package_ensure = present
-         }
-       } else {
-         $service_enable = false
-         $service_ensure = stopped
-         $package_ensure = absent
-       }
-
-       # Declare resources without any relationships in this section
-
-       package { [ "bluez-libs", "bluez-utils"]:
-         ensure => $package_ensure,
-       }
-
-       service { hidd:
-         enable         => $service_enable,
-         ensure         => $service_ensure,
-         status         => "source /etc/init.d/functions; status hidd",
-         hasstatus      => true,
-         hasrestart     => true,
-      }
-
-      # Finally, declare relations based on desired behavior
-
-      if $ensure == "present" {
-        Package["bluez-libs"]  -> Package["bluez-utils"]
-        Package["bluez-libs"]  ~> Service[hidd]
-        Package["bluez-utils"] ~> Service[hidd]
-      } else {
-        Service["hidd"]        -> Package["bluez-utils"]
-        Package["bluez-utils"] -> Package["bluez-libs"]
-      }
-    }
-{% endhighlight %}
