@@ -58,15 +58,14 @@ the following guidelines.
     When surveyed, there was near consensus that an ENC should not be
     required.  At the same time, every module we write should work well
     with an ENC.
-4.  Classes should not declare other classes.  
-    When surveyed, there was a strong preference to declare classes as
+4.  Classes should generally not declare other classes.  
+    There is a strong preference to declare classes as
     close to node scope as possible. Classes which require other
     classes should not directly declare them and should instead allow
     the system to fail if they are not declared by some other means.
     (Note: The reason is because of the non-deterministic scoping
     issues.  If class multi-declarations result in deterministic
-    behavior in the future, this philosophy may be revisited based on
-    the feedback from the survey.)
+    behavior in the future, this philosophy may be revisited.)
 
 ## Module Metadata
 
