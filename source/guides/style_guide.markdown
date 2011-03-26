@@ -8,7 +8,7 @@ Style Guide
 
 * * *
 
-## Style Guide Metadata
+### Style Guide Metadata
 
 Version 1.0
 
@@ -52,7 +52,7 @@ the following guidelines.
     In general, inheritance leads to code that is harder to read. 
     Most use cases for inheritance can be replaced by exposing class
     parameters that can be used to configure resource attributes.
-    (See Appendix A)
+    See a possible approach in Appendix A.
 3.  Modules must not require an ENC.  Modules must operate with
     ENC’s.  
     When surveyed, there was near consensus that an ENC should not be
@@ -696,17 +696,11 @@ Modules should avoid the use of extlookup() in favor of ENCs or other alternativ
 
 ## Appendix A - Class Inheritance
 
-Dan asked me to document the process I’ve been working on to avoid
-class inheritance.  To aid this process, an example may be best.
- The bluetooth example from the Puppet Master training illustrates
-this example quite well.  The class inheritance solution is quite
-complicated while the conditional solution is quite straight
-forward.
+This Appendix process documents an approach to avoiding class inheritance.
+This approach is shown below using the bluetooth example from the Puppet Master 
+training.
 
-This is also related to Appendix B - Organization of Classes since
-variables play a key role in the strategy.
-
-There are a couple of assumptions I make:
+There are a couple of assumptions we make:
 
 1.  Class inheritance is only useful for overriding resource
     parameters.
