@@ -425,13 +425,9 @@ interpreted as "If there are any X’s they should be here".
 5.  May override resources
 6.  May declare resource defaults
 7.  May declare defined resource types
-8.  May declare Groups
-9.  May declare Users
-10.  May declare Packages
-11.  May declare Files
-12. May declare Services
-13. May declare other resources
-14. May declare Resource relationships inside of conditionals
+8.  May declare native types (Users, Groups, Services...)
+9. May declare other resources
+10. May declare Resource relationships inside of conditionals
 
 The following example follows the recommended style:
 
