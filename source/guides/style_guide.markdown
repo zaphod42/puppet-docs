@@ -426,7 +426,7 @@ interpreted as "If there are any X’s they should be here".
 6.  May declare resource defaults
 7.  May declare defined resource types
 8.  May declare native types (Users, Groups, Services...)
-9. May declare other resources
+9.  May declare other resources
 10. May declare Resource relationships inside of conditionals
 
 The following example follows the recommended style:
@@ -773,19 +773,3 @@ to a single class:
       }
     }
 {% endhighlight %}
-
-## Appendix B - Internal Organization of a Class
-
-Some internal organization of resources, variables, logic and
-defaults may benefit readability.  Here is the organization I’ve
-been following for my classes:
-
-1.  define the class with parameters.
-2.  Validate the class parameters using conditional logic and fail.
-3.  Default to the most general case.
-4.  Set variables to customize behavior based on validated class parameters
-5.  Package names for Debian, Ubuntu, RedHat, Solaris
-6.  Enable / Disable, Running / Stopped, Present / Absent Behavior
-7.  Declare resources without relationships
-8.  Declare relationships based on validated class parameters
-
