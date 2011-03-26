@@ -19,6 +19,12 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
 this document are to be interpreted as described in
 [RFC 2119](http://www.google.com/url?q=http://www.faqs.org/rfcs/rfc2119.html&sa=D&sntz=1&usg=AFQjCNHSKK-6ZHOhijUT4-3b9Bhi7FI0Ww).
 
+## Puppet version
+
+This style guide is specific to Puppet version 2.6.x and makes
+recommendations based on language features that are only 
+available starting with version 2.6.0.
+
 ## Why a Style Guide?
 
 Puppet Labs develops modules for customers and the community.
