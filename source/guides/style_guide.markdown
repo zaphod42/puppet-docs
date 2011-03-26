@@ -21,9 +21,9 @@ this document are to be interpreted as described in
 
 ## Puppet version
 
-This style guide is specific to Puppet version 2.6.x and makes
-recommendations based on language features that are only 
-available starting with version 2.6.0.
+This style guide is largely specific to Puppet version 2.6.x and makes
+recommendations based on some language features that are only 
+available starting in version 2.6.0 and later.
 
 ## Why a Style Guide?
 
