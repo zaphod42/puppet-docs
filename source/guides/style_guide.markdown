@@ -48,10 +48,11 @@ the following guidelines.
     this is highly subjective, so this is by no means a hard and fast
     rule.  Please use your best judgement as to what “readable” means.
     If you can read your own code 3 months from now, that’s a great start.
-2.  Should avoid inheritance whenever possible.  
-    If language features such as relationship declarations (\->, ~>)
-    can eliminate the need for class inheritance and parameter
-    overriding, please make use of the features.
+2.  Inheritance should be avoided.
+    In general, inheritance leads to code that is harder to read. 
+    Most use cases for inheritance can be replaced by exposing class
+    parameters that can be used to configure resource attributes.
+    (See appendix A)
 3.  Modules must not require an ENC.  Modules must operate with
     ENC’s.  
     When surveyed, there was near consensus that an ENC should not be
