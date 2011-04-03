@@ -37,22 +37,26 @@ No style manual can cover every possible circumstance. When a judgement call
 becomes necessary, keep in mind the following general ideas:
 
 4.1   Readability matters.
+
 4.1.1 If you have to choose between two equally effective alternatives, pick the
 more readable one. This is, of course, subjective, but if you can read your
 own code three months from now, that's a great start.
 
 4.2   Inheritance should be avoided.
+
 4.2.1 In general, inheritance leads to code that is harder to read.
 Most use cases for inheritance can be replaced by exposing class
 parameters that can be used to configure resource attributes. See
 the [Class Inheritance](#class-inheritance) section for more details.
 
 4.3   Modules must work with an ENC without requiring one.
+
 4.3.1 An internal survey yielded near consensus that an ENC should not be
 required.  At the same time, every module we write should work well
 with an ENC.
 
 4.4   Classes should generally not declare other classes.
+
 4.4.1 Declare classes as close to node scope as possible. Classes which require
 other classes should not directly declare them and should instead allow the
 system to fail if they are not declared by some other means. (Although the
