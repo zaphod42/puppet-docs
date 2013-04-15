@@ -92,8 +92,11 @@ By default, Puppet 3.2 is backward compatible with Puppet 3.1, with only minimal
 
 Be warned: **Features in the experimental parser are exempt from semantic versioning.** They might change several times before being released in the "current" parser.
 
+We have created an example of a module converted to use the (experimental features)[experimentalmodule].
+
 [arm2]: https://github.com/puppetlabs/armatures/tree/master/arm-2.iteration
 [32experimental]: /puppet/3/reference/lang_experimental_3_2.html
+[experimentalmodule]: https://github.com/hlindberg/puppet-network
 
 (Issues [19983][] and [11331][])
 

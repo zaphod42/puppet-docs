@@ -64,6 +64,9 @@ Lets look at what we just did:
     * We declared the lambda to have one parameter, and we named it `$value` (we could have called it whatever we wanted; `$x`, or `$a_unicorn`, etc.)
     * The lambdas body is enclosed in braces `{ }`, where you can place any puppet logic except class, define, or node statements.
 
+The puppet-network module has been reworked to use this new functionality. You can (take a look)[experimentalmodule] at it to understand how you might use these features in your own manifests.
+
+[experimentalmodule]: https://github.com/hlindberg/puppet-network
 
 ### Available Functions
 
